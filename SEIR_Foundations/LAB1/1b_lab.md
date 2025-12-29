@@ -116,9 +116,9 @@ You must verify everything via CLI — not screenshots alone. What? You think th
 
 7.1 Verify Parameter Store Values
 
-aws ssm get-parameters \
-  --names /lab/db/endpoint /lab/db/port /lab/db/name \
-  --with-decryption
+    aws ssm get-parameters \
+      --names /lab/db/endpoint /lab/db/port /lab/db/name \
+      --with-decryption
 
 Expected:
   Parameter names returned
@@ -126,8 +126,8 @@ Expected:
 
   7.2 Verify Secrets Manager Value
   
-  aws secretsmanager get-secret-value \
-  --secret-id lab/rds/mysql
+      aws secretsmanager get-secret-value \
+      --secret-id lab/rds/mysql
 
 Expected:
   JSON output
@@ -140,17 +140,17 @@ Expected:
 7.3 Verify EC2 Can Read Both Systems
 From EC2:
 
-aws ssm get-parameter --name /lab/db/endpoint
-aws secretsmanager get-secret-value --secret-id lab/rds/mysql
+    aws ssm get-parameter --name /lab/db/endpoint
+    aws secretsmanager get-secret-value --secret-id lab/rds/mysql
 
 Expected:
   Both commands succeed
   No AccessDeniedException
   
 7.4 Verify CloudWatch Log Group Exists
-
-aws logs describe-log-groups \
-  --log-group-name-prefix /aws/ec2/lab-rds-app
+    
+    aws logs describe-log-groups \
+      --log-group-name-prefix /aws/ec2/lab-rds-app
 
 Expected:
   Log group present
@@ -163,17 +163,17 @@ Simulate failure (examples):
 
 Then check logs:
 
-aws logs filter-log-events \
-  --log-group-name /aws/ec2/lab-rds-app \
-  --filter-pattern "ERROR"
+    aws logs filter-log-events \
+      --log-group-name /aws/ec2/lab-rds-app \
+      --filter-pattern "ERROR"
 
 Expected:
   Explicit DB connection failure messages
   
 7.6 Verify CloudWatch Alarm
 
-aws cloudwatch describe-alarms \
-  --alarm-name-prefix lab-db-connection
+    aws cloudwatch describe-alarms \
+      --alarm-name-prefix lab-db-connection
 
 Expected:
   Alarm present
@@ -181,7 +181,8 @@ Expected:
 
 7.7 Incident Recovery Verification
 After restoring correct credentials or connectivity:
-curl http://<EC2_PUBLIC_IP>/list
+
+    curl http://<EC2_PUBLIC_IP>/list
 
 Expected:
   Application resumes normal operation
